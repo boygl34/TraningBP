@@ -1,6 +1,11 @@
 <script>
 	import Header from './Header.svelte';
 	import './styles.css';
+	
+    import { Styles } from 'sveltestrap';
+
+
+
 </script>
 
 <div class="app">
@@ -51,3 +56,4 @@
 		}
 	}
 </style>
+<Styles />
