@@ -1,7 +1,6 @@
 <script>
 	import Header from './Header.svelte';
 	import './styles.css';
-	import { Styles } from 'sveltestrap';
 </script>
 
 <div class="app">
@@ -15,7 +14,7 @@
 		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
 	</footer>
 </div>
-<Styles/>
+
 <style>
 	.app {
 		display: flex;
