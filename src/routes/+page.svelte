@@ -1,20 +1,27 @@
 <script>
-	import { CardImg, Carousel, CarouselControl, CarouselItem, Image } from 'sveltestrap';
-	Image
+	import {  Carousel, CarouselControl, CarouselItem,Image } from 'sveltestrap';
+	
+
+	let data=[]
+for (let index = 1; index <= 42; index++) {
+	data.push({url:`src/lib/images/TPR101V/TPR101V_${index}.jpg`})
+    
+}
 	let activeIndex = 0;
-	const items = [];
+	const items = data;
+console.log(items);
 </script>
 
 <svelte:head>
 	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
-
+<!-- <Image src='src/lib/images/TPR101V/TPR101V_1.jpg' /> -->
 <Carousel {items} bind:activeIndex>
 	<div class="carousel-inner">
 	  {#each items as item, index}
 		<CarouselItem bind:activeIndex itemIndex={index}>
-		  <Image src={item} class="d-block w-100" alt={`${item} ${index + 1}`} />
+		  <Image fluid  src={item.url} />
 		</CarouselItem>
 	  {/each}
 	</div>
