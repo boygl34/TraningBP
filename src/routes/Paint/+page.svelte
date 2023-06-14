@@ -1,6 +1,7 @@
 <script>
 	import {  Carousel, CarouselControl, CarouselItem,Image,InputGroup,Input,Label,Button,Row,Col,Progress  } from 'sveltestrap';
 	import { onMount } from "svelte";
+	import moment from "moment"
 	const Sach=[{Ten:"TPR100V",Trang:32},
 				{Ten:"TPR101V",Trang:42},
 				{Ten:"TPR102V",Trang:22},
@@ -12,11 +13,15 @@
 				{Ten:"TPR108V",Trang:22}]
     let items=[]
 	let SoTrang 
-	let SachHoc
+	let SachHoc,ThoiGian
 	let activeIndex = 0;
-
+let time = new Date()
 onMount(()=>{
 	SachHoc='TPR100V'
+	setInterval(()=>{
+		ThoiGian = moment(new Date()).diff(time,"minutes")
+		console.log(ThoiGian);
+	},1000)
 getLink()
 })
 	
@@ -31,11 +36,13 @@ async function getLink() {
 			}
 		});
 	for  (let page = 1; page <= SoTrang; page++) {
-	if(page<10){page = "0"+page}else{page=page}
+	if(page<10){ page = "0"+page}else{page=page}
 	items.push({url:`https://flame-lowly-cirrus.glitch.me/Paint/${SachHoc}/${page}.jpg`})
 	}
 	}
-
+function Resettime(){
+ time = new Date() 
+}
 	
 
 
@@ -46,21 +53,21 @@ async function getLink() {
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 <Row>
-    <Col>
+    <Col xs="6">
 	<InputGroup>
-	<Input type="select" name="select" bind:value={SachHoc} >
+	<Input size="sm" type="select" name="select" bind:value={SachHoc} >
 		{#each Sach as ten}
 			<option value={ten.Ten}>{ten.Ten}</option>
 		{/each}
 	</Input>
-	<Button on:click={getLink} >Load</Button>
+	<Button size="sm" on:click={getLink} >Load</Button>
 </InputGroup>
 	</Col>
-    <Col></Col>
+	<Col>{ThoiGian}</Col>
     <Col>
 		<Progress value={(activeIndex+1)/SoTrang*100}></Progress>
 	</Col>
-    <Col>Trang {activeIndex+1}/{SoTrang}</Col>
+   
   </Row>
 
 
@@ -72,7 +79,18 @@ async function getLink() {
 			</CarouselItem>
 		{/each}
 	</div>
-
-	<CarouselControl direction="prev" bind:activeIndex {items} />
+	{#if  activeIndex != 0}
+		<CarouselControl direction="prev" bind:activeIndex {items}  />
+	{/if}
+	{#if  activeIndex < SoTrang-1}
 	<CarouselControl direction="next" bind:activeIndex {items} />
+	
+    {/if}
+    {#if  activeIndex == SoTrang-1}
+	{#if ThoiGian >5}
+		<Button>Hoàn Thành</Button>
+	{:else}
+	<Button>Bạn Đọc Quá Nhanh</Button>
+	{/if}
+	{/if}
 </Carousel>

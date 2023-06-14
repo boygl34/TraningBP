@@ -23,7 +23,7 @@
 				<a href="/Paint">Paint</a>
 			</li>
 			<li aria-current={$page.url.pathname.startsWith('/Body') ? 'page' : undefined}>
-				<a href="/Body">Sverdle</a>
+				<a href="/Body">Body</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
