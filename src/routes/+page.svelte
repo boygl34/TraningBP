@@ -4,7 +4,7 @@
 
 	let data=[]
 for (let index = 1; index <= 42; index++) {
-	data.push({url:`src/lib/images/TPR101V/TPR101V_${index}.jpg`})
+	data.push({url:`https://mixolydian-motley-lillipilli.glitch.me/TPR101V/TPR101V_${index}.jpg`})
     
 }
 	let activeIndex = 0;
