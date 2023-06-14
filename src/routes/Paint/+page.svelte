@@ -1,5 +1,6 @@
 <script>
-	import {  Carousel, CarouselControl, CarouselItem,Image,FormGroup,Input,Label } from 'sveltestrap';
+	import {  Carousel, CarouselControl, CarouselItem,Image,InputGroup,Input,Label,Button,Row,Col,Progress  } from 'sveltestrap';
+	import { onMount } from "svelte";
 	const Sach=[{Ten:"TPR100V",Trang:32},
 				{Ten:"TPR101V",Trang:42},
 				{Ten:"TPR102V",Trang:22},
@@ -11,19 +12,28 @@
 				{Ten:"TPR108V",Trang:22}]
     let items=[]
 	let SoTrang 
-	let SachHoc='TPR100V'
+	let SachHoc
 	let activeIndex = 0;
-	getLink()
-	function getLink() {
-		console.log(SachHoc);
+
+onMount(()=>{
+	SachHoc='TPR100V'
+getLink()
+})
+	
+
+async function getLink() {
         activeIndex = 0
 		items=[];
-		SoTrang=42
-	for (let SoTrang = 1; SoTrang <= 42; SoTrang++) {
-	if(SoTrang<10){SoTrang = "0"+SoTrang}else{SoTrang=SoTrang}
-	items.push({url:`https://flame-lowly-cirrus.glitch.me/Paint/${SachHoc}/${SoTrang}.jpg`})
+		SoTrang=1
+		Sach.forEach(element => {
+			if(element.Ten==SachHoc){
+				SoTrang = element.Trang	
+			}
+		});
+	for  (let page = 1; page <= SoTrang; page++) {
+	if(page<10){page = "0"+page}else{page=page}
+	items.push({url:`https://flame-lowly-cirrus.glitch.me/Paint/${SachHoc}/${page}.jpg`})
 	}
-	console.log(items);
 	}
 
 	
@@ -35,15 +45,26 @@
 	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
-<FormGroup>
-	<Input type="select" name="select" bind:value={SachHoc} on:change={getLink}>
+<Row>
+    <Col>
+	<InputGroup>
+	<Input type="select" name="select" bind:value={SachHoc} >
 		{#each Sach as ten}
 			<option value={ten.Ten}>{ten.Ten}</option>
 		{/each}
 	</Input>
-</FormGroup>
+	<Button on:click={getLink} >Load</Button>
+</InputGroup>
+	</Col>
+    <Col></Col>
+    <Col>
+		<Progress value={(activeIndex+1)/SoTrang*100}></Progress>
+	</Col>
+    <Col>Trang {activeIndex+1}/{SoTrang}</Col>
+  </Row>
 
-<Carousel bind:items={items} bind:activeIndex>
+
+<Carousel {items} bind:activeIndex>
 	<div class="carousel-inner">
 		{#each items as item, index}
 			<CarouselItem bind:activeIndex itemIndex={index}>
