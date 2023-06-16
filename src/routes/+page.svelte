@@ -3,13 +3,14 @@
 	import { Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from 'sveltestrap';
     import { Badge } from 'sveltestrap'
     import { goto } from '$app/navigation';
-	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc } from './store';
+	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id } from './store';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
 		let ThongTin = await axios.get('https://serverbp.glitch.me/user/TVT_TRUCVC');
 		console.log(ThongTin.data);
+        $id=ThongTin.data.id;
 		$KTV = ThongTin.data.fullname;
 		$BoPhan = ThongTin.data.BoPhan;
 		$TienDo = ThongTin.data.TienDo;

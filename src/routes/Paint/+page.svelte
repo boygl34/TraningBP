@@ -1,8 +1,9 @@
 <script>
 	import { Carousel, CarouselControl, CarouselItem, Image, InputGroup, Input, Label, Button, Row, Col, Progress } from 'sveltestrap';
-	import { onMount } from 'svelte';
+	import { onMount,onDestroy } from 'svelte';
 	import moment from 'moment';
-	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc } from '../store.js';
+	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc,id } from '../store.js';
+	import axios from 'axios';
 	const Sach = [
 		{ Ten: 'TPR100V', Trang: 32 },
 		{ Ten: 'TPR101V', Trang: 42 },
@@ -15,7 +16,8 @@
 		{ Ten: 'TPR108V', Trang: 22 }
 	];
 	let SoTrang, ThoiGian;
-	let activeIndex =0;
+	let activeIndex =$TrangDangHoc;
+	if($TrangDangHoc>SoTrang){$TrangDangHoc=0}
 	Sach.forEach((element) => {
 		if (element.Ten == $TenSach) {
 			SoTrang = element.Trang;
@@ -30,34 +32,29 @@
 		}
 		items.push({ url: `https://flame-lowly-cirrus.glitch.me/Paint/${$TenSach}/${page}.jpg` });
 	}
-	let SachHoc = $TenSach;
-	
+
 	let time = new Date();
-	onMount(() => {
-		activeIndex=$TrangDangHoc*1
-		setInterval(() => {
-			ThoiGian = moment(new Date()).diff(time, 'minutes');
-		}, 1000);
-	});
+let array = $TienDo
+const uploadtd=	setInterval(async() => {
+			let iduser = $id
+			array.forEach(element => {
+				if(element.TenSach == $TenSach){
+					element.TrangDangHoc = activeIndex,
+					element.SoTrang = SoTrang
+				}
+			});	
+		await axios.patch(`https://serverbp.glitch.me/user/${iduser}`,{"TienDo":array})	
+		}, 3000);
+onDestroy(()=>{
+	clearInterval(uploadtd)
+})
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>{$TenSach}</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
-<Row>
-	<Col xs="6">
-		<InputGroup>
-			<Input size="sm" type="select" name="select" bind:value={$TenSach}>
-				{#each Sach as ten}
-					<option value={ten.Ten}>{ten.Ten}</option>
-				{/each}
-			</Input>
-		</InputGroup>
-	</Col>
-	<Col>{ThoiGian}</Col>
-	<Col />
-</Row>
+
 
 <Progress value={((activeIndex + 1) / SoTrang) * 100} />
 
