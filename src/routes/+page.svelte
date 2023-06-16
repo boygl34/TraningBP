@@ -1,15 +1,16 @@
 <script>
+// @ts-nocheck
+
 	import { Input, Label, Button, Row, Col, Progress } from 'sveltestrap';
 	import { Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from 'sveltestrap';
     import { Badge } from 'sveltestrap'
     import { goto } from '$app/navigation';
-	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc } from './store';
+	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint } from './store';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
 		let ThongTin = await axios.get('https://serverbp.glitch.me/user/TVT_TRUCVC');
-		console.log(ThongTin.data);
         $id=ThongTin.data.id;
 		$KTV = ThongTin.data.fullname;
 		$BoPhan = ThongTin.data.BoPhan;
@@ -28,9 +29,7 @@
             <Badge color='danger'>{bai.TrangThai}</Badge>
             {:else if bai.TrangThai=="Đang Học" }
             <Badge color='warning'>{bai.TrangThai}</Badge>
-            {/if}
-          
-        
+            {/if}        
         </CardTitle>
 	</CardHeader>
 	<CardBody>
@@ -50,3 +49,4 @@
 </Col>
 {/each}
 </Row>
+

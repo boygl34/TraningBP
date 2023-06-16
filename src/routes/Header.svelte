@@ -2,13 +2,13 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/images/svelte-logo.svg';
 	import github from '$lib/images/github.svg';
+	import { KTV} from './store'; 
 </script>
 
 <header>
 	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
-		</a>
+		<p>{$KTV}</p>
+		
 	</div>
 
 	<nav>
@@ -19,10 +19,10 @@
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
 			</li>
-			<!-- <li aria-current={$page.url.pathname === '/Paint' ? 'page' : undefined}>
-				<a href="/Paint">Paint</a>
+		 <li aria-current={$page.url.pathname === '/BaoCao' ? 'page' : undefined}>
+				<a href="/BaoCao">Báo Cáo</a>
 			</li>
-			<li aria-current={$page.url.pathname.startsWith('/Body') ? 'page' : undefined}>
+			<!--	<li aria-current={$page.url.pathname.startsWith('/Body') ? 'page' : undefined}>
 				<a href="/Body">Body</a>
 			</li> -->
 		</ul>
@@ -32,7 +32,7 @@
 	</nav>
 
 	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
+		<a>
 			<img src={github} alt="GitHub" />
 		</a>
 	</div>
@@ -45,7 +45,7 @@
 	}
 
 	.corner {
-		width: 3em;
+		width: 7em;
 		height: 3em;
 	}
 
