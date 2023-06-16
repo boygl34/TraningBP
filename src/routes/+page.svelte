@@ -21,12 +21,22 @@
 <Col>
     <Card class="mb-3">
 	<CardHeader>
-		<CardTitle>{bai.TenSach}  <Badge >{bai.TrangThai}</Badge></CardTitle>
+		<CardTitle>{bai.TenSach} 
+            {#if bai.TrangThai=="Hoàn Thành" }
+            <Badge color= 'success'>{bai.TrangThai}</Badge>
+            {:else if bai.TrangThai=="Giao Bài" }
+            <Badge color='danger'>{bai.TrangThai}</Badge>
+            {:else if bai.TrangThai=="Đang Học" }
+            <Badge color='warning'>{bai.TrangThai}</Badge>
+            {/if}
+          
+        
+        </CardTitle>
 	</CardHeader>
 	<CardBody>
 		<CardSubtitle>Hoàn thành Trước : {bai.Deadline}</CardSubtitle>
 		<CardText>Ngày Bắt Đầu : {bai.NgayBD}</CardText>
-		<Button on:click={()=>{
+		<Button color= 'success' on:click={()=>{
                 $TenSach = bai.TenSach
                 $TrangDangHoc = bai.TrangDangHoc
                 $ThoiGianHoc=bai.ThoiGianHoc
