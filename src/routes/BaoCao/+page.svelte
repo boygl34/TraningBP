@@ -1,8 +1,9 @@
 <script>
 	import axios from 'axios';
-	import { Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle,Badge } from 'sveltestrap';
+	import { Button, Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle, Badge, Input, InputGroup, Progress } from 'sveltestrap';
 	import { KTV, BoPhan, TienDo, TenSach, TrangDangHoc, id, ThoiGianHoc, SachPaint, SachBody } from '../store';
-	import { Form, FormGroup, FormText, Input, Label } from 'sveltestrap';
+	import { Form, FormGroup, FormText, Label, Row, Col } from 'sveltestrap';
+	import SveltyPicker from 'svelty-picker';
 	import { onMount } from 'svelte';
 	let promise = getThongTin();
 	async function getThongTin() {
@@ -14,64 +15,94 @@
 			throw new Error(res);
 		}
 	}
-	let BoPhanGiaoBai,KTVGiaoBai;
+	let BoPhanGiaoBai, KTVGiaoBai, SachGiaoBai;
+	$: if (BoPhanGiaoBai == 'Paint') {
+		SachGiaoBai = $SachPaint;
+	} else {
+		SachGiaoBai = $SachBody;
+	}
+
+ 
 </script>
 
+<FormGroup>
+	<Label for="exampleEmail">Bộ Phận</Label>
+	<Input type="select" name="select" bind:value={BoPhanGiaoBai}>
+		<option />
+		<option value="Paint">Sơn</option>
+		<option value="Body">Đông</option>
+	</Input>
+</FormGroup>
 
+{#await promise}
+	<p>...waiting</p>
+{:then BaoCao}
 	<FormGroup>
-		<Label for="exampleEmail">Bộ Phận</Label>
-		<Input type="select" name="select" bind:value={BoPhanGiaoBai}>
+		<Label for="exampleEmail">Tên KTV</Label>
+		<Input type="select" name="select" bind:value={KTVGiaoBai}>
 			<option />
-			<option value="Paint">Sơn</option>
-			<option value="Body">Đông</option>
+			{#each BaoCao as ktv}
+				{#if ktv.BoPhan == BoPhanGiaoBai}
+					<option value={ktv.id}>{ktv.fullname}</option>
+				{/if}
+			{/each}
 		</Input>
 	</FormGroup>
-	{#await promise}
-	   <p>...waiting</p>
-	{:then BaoCao}    
+	<Row cols={{ lg: 3, md: 2, sm: 1 }}>
+		{#each BaoCao as ktv}
+			{#if ktv.id == KTVGiaoBai && ktv.BoPhan == BoPhanGiaoBai}
+				{#each SachGiaoBai as sachgiao}
+					<Col>
+						<Card>
+							<CardHeader>
+								<CardTitle
+									>{sachgiao.Ten}
+									{#each ktv.TienDo as sach}
+										{#if sach.TenSach == sachgiao.Ten}
+											{#if sach.TrangThai == 'Hoàn Thành'}
+												<Badge color="success">{sach.TrangThai}</Badge>
+											{:else if sach.TrangThai == 'Giao Bài'}
+												<Badge color="danger">{sach.TrangThai}</Badge>
+											{:else if sach.TrangThai == 'Đang Học'}
+												<Badge color="warning">{sach.TrangThai}</Badge>
+											{/if}
+										{/if}
+									{/each}
+								</CardTitle>
+							</CardHeader>
+							<CardBody>
 
-        <FormGroup>
-            <Label for="exampleEmail">Tên KTV</Label>
-            <Input type="select" name="select" bind:value={KTVGiaoBai}>
-                <option />
-                    {#each BaoCao as ktv}
-                        {#if ktv.BoPhan == BoPhanGiaoBai}
-                            <option value={ktv.fullname}>{ktv.fullname}</option>
-                        {/if}
-                    {/each}
-            </Input>
-        </FormGroup>
-        {#each BaoCao as ktv}
-            {#if  ktv.fullname==KTVGiaoBai && ktv.BoPhan==BoPhanGiaoBai }
-                {#each ktv.TienDo as tiendo }
-                <Card class="mb-3">
-                    <CardHeader>
-                        <CardTitle>{tiendo.TenSach} 
-                            {#if tiendo.TrangThai=="Hoàn Thành" }
-                            <Badge color= 'success'>{tiendo.TrangThai}</Badge>
-                            {:else if tiendo.TrangThai=="Giao Bài" }
-                            <Badge color='danger'>{tiendo.TrangThai}</Badge>
-                            {:else if tiendo.TrangThai=="Đang Học" }
-                            <Badge color='warning'>{tiendo.TrangThai}</Badge>
-                            {/if}        
-                        </CardTitle>
-                    </CardHeader>
-                    <CardBody>
-                      <CardSubtitle>Card subtitle</CardSubtitle>
-                      <CardText>
-                       
-                      </CardText>
-                      <Button>Button</Button>
-                    </CardBody>
-                    <CardFooter>Footer</CardFooter>
-                  </Card>
-                {/each}
-            {/if}
-        {/each}
+                                    {#each ktv.TienDo as sach}
+                                        {#if sach.TenSach == sachgiao.Ten}
+                                            <FormGroup floating label="Ngày Hoàn Thành">
+                                                <SveltyPicker inputClasses=" floating form-control" format="dd/mm/yyyy" name="NgayHT" value={sach.NgayHT} require />
+                                            </FormGroup>
+                                            <FormGroup floating label="Ngày Bắt Đầu">
+                                                <SveltyPicker inputClasses=" floating form-control" format="dd/mm/yyyy" name="NgayBD" value={sach.NgayBD} />
+                                            </FormGroup>
+                                            <Button >Cập Nhật</Button>
+                                        {/if}
+                                    {/each}
+                              
+                                    <Button color="primary" on:click={async()=>{
+                                            ktv.TienDo.push({TenSach: sachgiao.Ten, TrangThai: 'Giao Bài', TrangDangHoc: 0,"ThoiGianHoc": 0})
+                                            console.log("Giao Bài",  ktv.TienDo);
+                                    await axios.patch(`https://serverbp.glitch.me/user/${KTVGiaoBai}`, {TienDo:  ktv.TienDo });
+                                    }}>Giao Bài</Button>
+                                
+							</CardBody>
 
-    {:catch error}
-                    <p style="color: red">{error.message}</p>
-    {/await}
-
-
-	
+							<CardFooter>
+								{#each ktv.TienDo as sach}
+									{#if sach.TenSach == sachgiao.Ten}
+										<Progress value={((sach.TrangDangHoc + 1) / sach.SoTrang) * 100}>{sach.TrangDangHoc + 1} / {sach.SoTrang}</Progress>
+									{/if}
+								{/each}
+							</CardFooter>
+						</Card>
+					</Col>
+				{/each}
+			{/if}
+		{/each}
+	</Row>
+{/await}

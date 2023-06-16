@@ -36,6 +36,7 @@
 		"axios": "^1.4.0",
 		"moment": "^2.29.4",
 		"svelte-image": "^0.2.9",
-		"sveltestrap": "^5.10.0"
+		"sveltestrap": "^5.10.0",
+		"svelty-picker": "^3.5.0"
 	}
 }
