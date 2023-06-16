@@ -2,8 +2,7 @@
 	import { Carousel, CarouselControl, CarouselItem, Image, InputGroup, Input, Label, Button, Row, Col, Progress } from 'sveltestrap';
 	import { onMount } from 'svelte';
 	import moment from 'moment';
-	import { KTV,BoPhan } from '../store.js';
-	import axios from "axios";
+	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc } from '../store.js';
 	const Sach = [
 		{ Ten: 'TPR100V', Trang: 32 },
 		{ Ten: 'TPR101V', Trang: 42 },
@@ -15,42 +14,31 @@
 		{ Ten: 'TPR107V', Trang: 26 },
 		{ Ten: 'TPR108V', Trang: 22 }
 	];
+	let SoTrang, ThoiGian;
+	let activeIndex =0;
+	Sach.forEach((element) => {
+		if (element.Ten == $TenSach) {
+			SoTrang = element.Trang;
+		}
+	});
 	let items = [];
-	let SoTrang;
-	let SachHoc, ThoiGian;
-	let activeIndex = 0;
+	for (let page = 1; page <= SoTrang; page++) {
+		if (page < 10) {
+			page = '0' + page;
+		} else {
+			page = page;
+		}
+		items.push({ url: `https://flame-lowly-cirrus.glitch.me/Paint/${$TenSach}/${page}.jpg` });
+	}
+	let SachHoc = $TenSach;
+	
 	let time = new Date();
 	onMount(() => {
+		activeIndex=$TrangDangHoc*1
 		setInterval(() => {
 			ThoiGian = moment(new Date()).diff(time, 'minutes');
 		}, 1000);
-		getLink();
 	});
-
-	async function getLink() {
-		console.log($KTV)
-		activeIndex = 0;
-		items = [];
-		Sach.forEach((element) => {
-			if (element.Ten == SachHoc) {
-				SoTrang = element.Trang;
-			}
-		});
-	for (let page = 1; page <= SoTrang; page++) {
-			if (page < 10) {
-				page = '0' + page;
-			} else {
-				page = page;
-			}
-			items.push({ url: `https://flame-lowly-cirrus.glitch.me/Paint/${SachHoc}/${page}.jpg` });
-		}
-		time = new Date();
-	}
-
- async function HoanThanh() {
-
-}
-
 </script>
 
 <svelte:head>
@@ -60,12 +48,11 @@
 <Row>
 	<Col xs="6">
 		<InputGroup>
-			<Input size="sm" type="select" name="select" bind:value={SachHoc}>
+			<Input size="sm" type="select" name="select" bind:value={$TenSach}>
 				{#each Sach as ten}
 					<option value={ten.Ten}>{ten.Ten}</option>
 				{/each}
 			</Input>
-			<Button size="sm" on:click={getLink}>Load</Button>
 		</InputGroup>
 	</Col>
 	<Col>{ThoiGian}</Col>
@@ -73,6 +60,7 @@
 </Row>
 
 <Progress value={((activeIndex + 1) / SoTrang) * 100} />
+
 <Carousel {items} bind:activeIndex>
 	<div class="carousel-inner">
 		{#each items as item, index}
@@ -91,7 +79,7 @@
 		{#if ThoiGian > 5}
 			<Button>Hoàn Thành</Button>
 		{:else}
-			<Button on:click={HoanThanh}>Bạn Đọc Quá Nhanh</Button>
+			<Button>Bạn Đọc Quá Nhanh</Button>
 		{/if}
 	{/if}
 </Carousel>
