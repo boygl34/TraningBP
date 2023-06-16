@@ -1,20 +1,16 @@
 <script>
 	import Header from './Header.svelte';
 	import './styles.css';
-    import { Styles } from 'sveltestrap';
-
-
-
+	import { Styles, Container } from 'sveltestrap';
 </script>
 
-
-	<Header />
-
-	<main>
+<Header />
+<Container
+	><main>
 		<slot />
 	</main>
-
+</Container>
+<Styles />
 
 <style>
 </style>
-<Styles />

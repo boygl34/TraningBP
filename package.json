@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"axios": "^1.4.0",
 		"moment": "^2.29.4",
 		"svelte-image": "^0.2.9",
 		"sveltestrap": "^5.10.0"
