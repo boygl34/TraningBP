@@ -3,7 +3,7 @@
 	import { Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from 'sveltestrap';
     import { Badge } from 'sveltestrap'
     import { goto } from '$app/navigation';
-	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id } from './store';
+	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc } from './store';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
 
@@ -29,10 +29,13 @@
 		<Button on:click={()=>{
                 $TenSach = bai.TenSach
                 $TrangDangHoc = bai.TrangDangHoc
+                $ThoiGianHoc=bai.ThoiGianHoc
                 goto(`/${$BoPhan}`)     
         }}>Học</Button>
 	</CardBody>
-	<CardFooter>Footer</CardFooter>
+	<CardFooter><Progress value={((bai.TrangDangHoc + 1) / bai.SoTrang) * 100} >{(bai.TrangDangHoc + 1)} / {bai.SoTrang}
+    </Progress>
+    </CardFooter>
 </Card>
 </Col>
 {/each}

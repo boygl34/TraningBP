@@ -2,7 +2,7 @@
 	import { Carousel, CarouselControl, CarouselItem, Image, InputGroup, Input, Label, Button, Row, Col, Progress } from 'sveltestrap';
 	import { onMount,onDestroy } from 'svelte';
 	import moment from 'moment';
-	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc,id } from '../store.js';
+	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc,id,ThoiGianHoc } from '../store.js';
 	import axios from 'axios';
 	const Sach = [
 		{ Ten: 'TPR100V', Trang: 32 },
@@ -15,7 +15,7 @@
 		{ Ten: 'TPR107V', Trang: 26 },
 		{ Ten: 'TPR108V', Trang: 22 }
 	];
-	let SoTrang, ThoiGian;
+	let SoTrang;
 	let activeIndex =$TrangDangHoc;
 	if($TrangDangHoc>SoTrang){$TrangDangHoc=0}
 	Sach.forEach((element) => {
@@ -37,14 +37,16 @@
 let array = $TienDo
 const uploadtd=	setInterval(async() => {
 			let iduser = $id
+			$ThoiGianHoc=$ThoiGianHoc+1
 			array.forEach(element => {
 				if(element.TenSach == $TenSach){
 					element.TrangDangHoc = activeIndex,
-					element.SoTrang = SoTrang
+					element.SoTrang = SoTrang,
+					element.ThoiGianHoc = $ThoiGianHoc
 				}
 			});	
 		await axios.patch(`https://serverbp.glitch.me/user/${iduser}`,{"TienDo":array})	
-		}, 3000);
+		}, 60000);
 onDestroy(()=>{
 	clearInterval(uploadtd)
 })
@@ -54,9 +56,13 @@ onDestroy(()=>{
 	<title>{$TenSach}</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
+<Row>
+	<Col></Col>
+	<Col></Col>
+	<Col>{(activeIndex + 1)}/ {SoTrang} - {$ThoiGianHoc}Phút<Progress value={((activeIndex + 1) / SoTrang) * 100} /></Col>
+</Row>
+<Col></Col>
 
-
-<Progress value={((activeIndex + 1) / SoTrang) * 100} />
 
 <Carousel {items} bind:activeIndex>
 	<div class="carousel-inner">
@@ -73,7 +79,7 @@ onDestroy(()=>{
 		<CarouselControl direction="next" bind:activeIndex {items} />
 	{/if}
 	{#if activeIndex == SoTrang - 1}
-		{#if ThoiGian > 5}
+		{#if $ThoiGianHoc > 5}
 			<Button>Hoàn Thành</Button>
 		{:else}
 			<Button>Bạn Đọc Quá Nhanh</Button>
