@@ -42,7 +42,7 @@
             </Input>
         </FormGroup>
         {#each BaoCao as ktv}
-            {#if  ktv.fullname==KTVGiaoBai}
+            {#if  ktv.fullname==KTVGiaoBai && ktv.BoPhan==BoPhanGiaoBai }
                 {#each ktv.TienDo as tiendo }
                 <Card class="mb-3">
                     <CardHeader>
