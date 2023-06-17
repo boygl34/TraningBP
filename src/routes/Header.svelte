@@ -4,7 +4,8 @@
 	import github from '$lib/images/github.svg';
 	import { Card } from "sveltestrap";
 	import axios from "axios";
-	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint } from './store';
+	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint,Job } from './store';
+	console.log($Job);
 </script>
 
 <header>
@@ -18,9 +19,11 @@
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
 			</li>
+ {#if $Job == "Giảng Viên"}
 		 <li aria-current={$page.url.pathname === '/GiaoBai' ? 'page' : undefined}>
 				<a href="/GiaoBai">Giao Bài</a>
 			</li>
+{/if}
 			<!--	<li aria-current={$page.url.pathname.startsWith('/Body') ? 'page' : undefined}>
 				<a href="/Body">Body</a>
 			</li> -->
@@ -37,6 +40,7 @@
 				let ThongTin = await axios.get(`https://serverbp.glitch.me/user/${person}`)
 									  .then(function (response) {
 										localStorage.setItem("iduser",response.data.id)
+										$Job = response.data.job
 										$id=response.data.id
 										$KTV = response.data.fullname;
 										$BoPhan = response.data.BoPhan;

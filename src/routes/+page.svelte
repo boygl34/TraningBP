@@ -5,7 +5,7 @@
 	import { Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from 'sveltestrap';
     import { Badge } from 'sveltestrap'
     import { goto } from '$app/navigation';
-	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint } from './store';
+	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint,Job } from './store';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
 	let iduser = localStorage.getItem("iduser")
@@ -24,6 +24,8 @@
 			let ThongTin = await axios.get(`https://serverbp.glitch.me/user/${params}`)
 									  .then(function (response) {
 										localStorage.setItem("iduser",response.data.id)
+										console.log(response.data.job);
+										$Job = response.data.job
 										$id=response.data.id
 										$KTV = response.data.fullname;
 										$BoPhan = response.data.BoPhan;

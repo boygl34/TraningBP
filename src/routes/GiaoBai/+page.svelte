@@ -107,6 +107,11 @@
                               
                                     <Button color="primary" on:click={async()=>{
 										var ojb = {TenSach: sachgiao.Ten, TrangThai: 'Giao Bài', TrangDangHoc: 0,"ThoiGianHoc": 0}
+										console.log(ktv.TienDo.length);
+										
+										if(ktv.TienDo.length==0){
+											ktv.TienDo.push(ojb)
+										}
                                           for (let index = 0; index < ktv.TienDo.length; index++) {
 											const r = ktv.TienDo[index];
 											if(r.TenSach==sachgiao.Ten){
