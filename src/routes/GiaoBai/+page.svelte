@@ -6,6 +6,9 @@
 	import SveltyPicker from 'svelty-picker';
 	import { onMount } from 'svelte';
 	import { each } from 'svelte/internal';
+	
+	
+	
 	let promise = getThongTin();
 	async function getThongTin() {
 		let BaoCao = await axios.get('https://serverbp.glitch.me/user');

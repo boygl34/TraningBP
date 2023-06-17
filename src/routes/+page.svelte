@@ -8,15 +8,40 @@
 	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint } from './store';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
+	let iduser = localStorage.getItem("iduser")
+    if(!iduser){
+		let person = prompt("ID Đăng Nhâp");
+			if (person != null) {
+				dangnhap(person)
+			}
+		
+		}else{
+			dangnhap(localStorage.getItem("iduser"))
+		
+		}
 
-	onMount(async () => {
-		let ThongTin = await axios.get('https://serverbp.glitch.me/user/TVT_TRUCVC');
-        $id=ThongTin.data.id;
-		$KTV = ThongTin.data.fullname;
-		$BoPhan = ThongTin.data.BoPhan;
-		$TienDo = ThongTin.data.TienDo;
-	});
+	async	function dangnhap(params) {
+			let ThongTin = await axios.get(`https://serverbp.glitch.me/user/${params}`)
+									  .then(function (response) {
+										localStorage.setItem("iduser",response.data.id)
+										$id=response.data.id
+										$KTV = response.data.fullname;
+										$BoPhan = response.data.BoPhan;
+										$TienDo = response.data.TienDo;
+    										})
+										.catch(function (error) {
+											alert("Lỗi không thể đăng nhập")
+										})
+
+			
+		}
+
+
+
 </script>
+
+  
+
 <Row cols={{ lg: 3, md: 2, sm: 1 }}>
 {#each $TienDo as bai }
 <Col>

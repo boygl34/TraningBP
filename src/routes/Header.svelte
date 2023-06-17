@@ -2,14 +2,13 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/images/svelte-logo.svg';
 	import github from '$lib/images/github.svg';
-	import { KTV} from './store'; 
+	import { Card } from "sveltestrap";
+	import axios from "axios";
+	import { KTV, BoPhan,TienDo,TenSach,TrangDangHoc,id,ThoiGianHoc,SachPaint } from './store';
 </script>
 
 <header>
-	<div class="corner">
-		<p>{$KTV}</p>
-		
-	</div>
+	
 
 	<nav>
 		<svg viewBox="0 0 2 3" aria-hidden="true">
@@ -30,12 +29,32 @@
 			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
 		</svg>
 	</nav>
+<div class="corner">
+		<Card on:click={async()=>{
+			localStorage.removeItem("iduser")
+		let person = prompt("ID Đăng Nhâp");
+			if (person != null) {
+				let ThongTin = await axios.get(`https://serverbp.glitch.me/user/${person}`)
+									  .then(function (response) {
+										localStorage.setItem("iduser",response.data.id)
+										$id=response.data.id
+										$KTV = response.data.fullname;
+										$BoPhan = response.data.BoPhan;
+										$TienDo = response.data.TienDo;})
+										.catch(function (error) {
+											alert("lỗi không thể đăng nhập")
+										})
+			}
+		
+		
 
-	<div class="corner">
+		}} body color="light" >{$KTV}</Card>
+	</div>
+	<!-- <div class="corner">
 		<a>
 			<img src={github} alt="GitHub" />
 		</a>
-	</div>
+	</div> -->
 </header>
 
 <style>
@@ -45,8 +64,8 @@
 	}
 
 	.corner {
-		width: 7em;
-		height: 3em;
+		width: auto;
+		height: auto;
 	}
 
 	.corner a {
