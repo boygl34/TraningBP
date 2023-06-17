@@ -17,7 +17,7 @@
 		$TienDo = ThongTin.data.TienDo;
 	});
 </script>
-<Row>
+<Row cols={{ lg: 3, md: 2, sm: 1 }}>
 {#each $TienDo as bai }
 <Col>
     <Card class="mb-3">
@@ -33,7 +33,7 @@
         </CardTitle>
 	</CardHeader>
 	<CardBody>
-		<CardSubtitle>Hoàn thành Trước : {bai.Deadline}</CardSubtitle>
+		<CardSubtitle>Hoàn thành Trước : {bai.NgayHT}</CardSubtitle>
 		<CardText>Ngày Bắt Đầu : {bai.NgayBD}</CardText>
 		<Button color= 'success' on:click={()=>{
                 $TenSach = bai.TenSach
