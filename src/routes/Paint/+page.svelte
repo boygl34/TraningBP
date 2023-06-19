@@ -3,11 +3,13 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Card, CardBody, CardFooter, CardHeader, CardSubtitle, CardText, CardTitle } from 'sveltestrap';
 	import moment from 'moment';
-	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc, id, ThoiGianHoc,SachPaint } from '../store.js';
+	import { KTV, BoPhan, TenSach, TienDo, TrangDangHoc, id, ThoiGianHoc, SachPaint } from '../store.js';
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
 
-	if($TenSach=="none"){goto("/")}
+	if ($TenSach == 'none') {
+		goto('/');
+	}
 
 	let SoTrang;
 	let activeIndex = $TrangDangHoc;
@@ -51,7 +53,7 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<Card >
+<Card>
 	<CardHeader>
 		<CardTitle>
 			<Row>
@@ -80,23 +82,21 @@
 
 	<CardFooter>
 		{#if activeIndex == SoTrang - 1}
-			{#if $ThoiGianHoc >= (SoTrang/2)}
-				<Button on:click={async()=>{
+			{#if $ThoiGianHoc >= SoTrang / 2}
+				<Button
+					on:click={async () => {
 						let iduser = $id;
-					array.forEach((element) => {
-			if (element.TenSach == $TenSach) {
-				element.TrangDangHoc = activeIndex; 
-				element.SoTrang = SoTrang;
-				element.ThoiGianHoc = $ThoiGianHoc;
-				element.TrangThai= "Hoàn Thành";
-
-			}
-		});
-		await axios.patch(`https://serverbp.glitch.me/user/${iduser}`, { TienDo: array });
-				}
-
-
-				}>Hoàn Thành</Button>
+						array.forEach((element) => {
+							if (element.TenSach == $TenSach) {
+								element.TrangDangHoc = activeIndex;
+								element.SoTrang = SoTrang;
+								element.ThoiGianHoc = $ThoiGianHoc;
+								element.TrangThai = 'Hoàn Thành';
+							}
+						});
+						await axios.patch(`https://serverbp.glitch.me/user/${iduser}`, { TienDo: array });
+					}}>Hoàn Thành</Button
+				>
 			{/if}
 		{/if}
 	</CardFooter>
