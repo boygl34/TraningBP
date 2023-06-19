@@ -80,7 +80,7 @@
 
 	<CardFooter>
 		{#if activeIndex == SoTrang - 1}
-			{#if $ThoiGianHoc > 5}
+			{#if $ThoiGianHoc >= (SoTrang/2)}
 				<Button on:click={async()=>{
 						let iduser = $id;
 					array.forEach((element) => {
